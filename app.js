@@ -3,9 +3,9 @@
 
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 const CFG = {
-  plant:     { max: 220, growRate: 0.055, size: 5 },
-  herbivore: { init: 22, maxSpeed: 1.1, senseRadius: 90, eatRadius: 10, hungerTick: 0.0022, repro: 0.00028, size: 6 },
-  predator:  { init: 4,  maxSpeed: 1.5, senseRadius: 110, killRadius: 12, hungerTick: 0.0016, repro: 0.00008, size: 8 },
+  plant:     { max: 260, growRate: 0.07, size: 5 },
+  herbivore: { init: 28, maxSpeed: 1.2, senseRadius: 100, eatRadius: 12, hungerTick: 0.0014, repro: 0.00035, size: 6 },
+  predator:  { init: 4,  maxSpeed: 1.5, senseRadius: 120, killRadius: 14, hungerTick: 0.001, repro: 0.00012, size: 8 },
   milestone: 5 * 60,   // seconds between reports
 };
 
@@ -14,37 +14,37 @@ const PRESETS = {
   forest: {
     label: '🌲 Forest',
     description: 'Dense canopy, many plants, balanced herbivores and predators.',
-    plantMax: 260, plantGrowRate: 0.065,
-    herbInit: 28, predInit: 5,
-    herbHungerTick: 0.0020, predHungerTick: 0.0014,
-    herbRepro: 0.00030, predRepro: 0.00009,
+    plantMax: 300, plantGrowRate: 0.080,
+    herbInit: 32, predInit: 5,
+    herbHungerTick: 0.0013, predHungerTick: 0.0009,
+    herbRepro: 0.00038, predRepro: 0.00013,
     skyColorDay: [100, 190, 130], skyColorNight: [10, 20, 15],
   },
   ocean: {
     label: '🌊 Ocean',
     description: 'Vast blue expanse — algae blooms fuel swarms of prey fish chased by predators.',
-    plantMax: 300, plantGrowRate: 0.08,
-    herbInit: 40, predInit: 6,
-    herbHungerTick: 0.0025, predHungerTick: 0.0018,
-    herbRepro: 0.00035, predRepro: 0.00010,
+    plantMax: 340, plantGrowRate: 0.095,
+    herbInit: 44, predInit: 6,
+    herbHungerTick: 0.0015, predHungerTick: 0.0011,
+    herbRepro: 0.00042, predRepro: 0.00013,
     skyColorDay: [20, 110, 210], skyColorNight: [5, 20, 60],
   },
   desert: {
     label: '🏜 Desert',
     description: 'Sparse scrub, scarce water — tough organisms eke out survival.',
-    plantMax: 90, plantGrowRate: 0.025,
-    herbInit: 12, predInit: 3,
-    herbHungerTick: 0.0018, predHungerTick: 0.0013,
-    herbRepro: 0.00018, predRepro: 0.00006,
+    plantMax: 110, plantGrowRate: 0.038,
+    herbInit: 16, predInit: 3,
+    herbHungerTick: 0.0011, predHungerTick: 0.0008,
+    herbRepro: 0.00025, predRepro: 0.00008,
     skyColorDay: [230, 190, 100], skyColorNight: [40, 25, 5],
   },
   arctic: {
     label: '🧊 Arctic',
     description: 'Frozen tundra, long nights — slow metabolism but brutal predators.',
-    plantMax: 110, plantGrowRate: 0.030,
-    herbInit: 18, predInit: 4,
-    herbHungerTick: 0.0015, predHungerTick: 0.0012,
-    herbRepro: 0.00020, predRepro: 0.00007,
+    plantMax: 140, plantGrowRate: 0.045,
+    herbInit: 24, predInit: 4,
+    herbHungerTick: 0.001, predHungerTick: 0.0007,
+    herbRepro: 0.00028, predRepro: 0.00009,
     skyColorDay: [200, 220, 240], skyColorNight: [10, 15, 40],
   },
 };
@@ -296,8 +296,8 @@ function initSim(seed, preset) {
   const herbInit = p.herbInit || CFG.herbivore.init;
   const predInit = p.predInit || CFG.predator.init;
 
-  // Start with 75% of max plants so herbivores can immediately eat
-  for (let i = 0; i < Math.floor(plantMax * 0.75); i++)
+  // Start with 85% of max plants so herbivores can immediately eat
+  for (let i = 0; i < Math.floor(plantMax * 0.85); i++)
     plants.push(mkPlant(rng() * W, rng() * H));
   for (let i = 0; i < herbInit; i++)
     herbivores.push(mkHerbivore(rng() * W, rng() * H));
@@ -339,8 +339,9 @@ function dist(a, b) {
 function steer(entity, tx, ty, speed) {
   const dx = tx - entity.x, dy = ty - entity.y;
   const d = Math.sqrt(dx * dx + dy * dy) || 1;
-  entity.vx += (dx / d) * speed * 0.15;
-  entity.vy += (dy / d) * speed * 0.15;
+  // Stronger steering factor (0.22) so organisms actually reach their targets
+  entity.vx += (dx / d) * speed * 0.22;
+  entity.vy += (dy / d) * speed * 0.22;
 }
 
 function clampSpeed(entity, maxSpd) {
@@ -371,8 +372,8 @@ function tick(dt) {
   const growMod = weather === 'rain' ? 2.5 : weather === 'drought' ? 0.2 : weather === 'storm' ? 0.6 : 1;
   const growNight = 0.35 + skyBrightness * 0.65;
   // Bonus growth when plants are critically low to prevent total herbivore starvation
-  const scarcityBonus = plants.length < 30 ? 3.0 : plants.length < 60 ? 1.5 : 1.0;
-  const maxGrowthRolls = Math.ceil(plantMax / 12);
+  const scarcityBonus = plants.length < 40 ? 4.0 : plants.length < 80 ? 2.0 : 1.0;
+  const maxGrowthRolls = Math.ceil(plantMax / 10);
   for (let i = 0; i < maxGrowthRolls; i++) {
     if (plants.length >= plantMax) break;
     if (rng() < plantGrowRate * dt * 60 * growMod * growNight * scarcityBonus) {
@@ -402,11 +403,11 @@ function tick(dt) {
       const d = dist(h, p);
       if (d < nearestPDist) { nearestPDist = d; nearestPlant = p; }
     }
-    // When very hungry, extend search range
-    if (!nearestPlant && h.hunger > 0.6) {
+    // When very hungry, extend search range to find food anywhere on screen
+    if (!nearestPlant && h.hunger > 0.5) {
       for (const pl of plants) {
         const d = dist(h, pl);
-        if (d < nearestPDist * 2) { nearestPDist = d; nearestPlant = pl; }
+        if (d < nearestPDist * 3) { nearestPDist = d; nearestPlant = pl; }
       }
     }
 
@@ -441,10 +442,10 @@ function tick(dt) {
       h.hunger = Math.max(0, h.hunger - 0.6);
     }
 
-    if (h.hunger >= 1 || h.age > 950) continue;
+    if (h.hunger >= 1 || h.age > 1100) continue;
 
-    const maxHerbs = p.herbInit ? p.herbInit * 4 : 80;
-    if (h.hunger < 0.45 && herbivores.length < maxHerbs && rng() < herbRepro * dt * 60)
+    const maxHerbs = p.herbInit ? p.herbInit * 5 : 120;
+    if (h.hunger < 0.55 && herbivores.length < maxHerbs && rng() < herbRepro * dt * 60)
       nextHerbs.push(mkHerbivore(h.x, h.y));
 
     nextHerbs.push(h);
@@ -453,6 +454,14 @@ function tick(dt) {
   if (herbivores.length > 0 && nextHerbs.length === 0)
     extinctionLog.push({ time: simTime, species: 'herbivore' });
   herbivores = nextHerbs;
+
+  // Population rescue: if critically low (< 3) but not zero, inject a few survivors
+  // so the ecosystem doesn't collapse into a boring static state too quickly.
+  const herbInit = p.herbInit || CFG.herbivore.init;
+  if (herbivores.length > 0 && herbivores.length < 3 && rng() < 0.004 * dt * 60) {
+    for (let i = 0; i < 3; i++)
+      herbivores.push(mkHerbivore(rng() * W, rng() * H));
+  }
 
   // Predators
   const nextPreds = [];
@@ -483,9 +492,10 @@ function tick(dt) {
       pred.hunger = Math.max(0, pred.hunger - 0.8);
     }
 
-    if (pred.hunger >= 1 || pred.age > 1300) continue;
+    if (pred.hunger >= 1 || pred.age > 1500) continue;
 
-    if (pred.hunger < 0.4 && predators.length < 20 && rng() < predRepro * dt * 60)
+    const maxPreds = p.predInit ? p.predInit * 5 : 20;
+    if (pred.hunger < 0.55 && predators.length < maxPreds && rng() < predRepro * dt * 60)
       nextPreds.push(mkPredator(pred.x, pred.y));
 
     nextPreds.push(pred);
@@ -494,6 +504,12 @@ function tick(dt) {
   if (predators.length > 0 && nextPreds.length === 0)
     extinctionLog.push({ time: simTime, species: 'predator' });
   predators = nextPreds;
+
+  // Population rescue for predators: inject a lone predator when critically low
+  // to maintain ecosystem tension longer
+  if (predators.length > 0 && predators.length < 2 && herbivores.length > 8 && rng() < 0.003 * dt * 60) {
+    predators.push(mkPredator(rng() * W, rng() * H));
+  }
 
   // Custom organisms
   const nextCustom = [];
