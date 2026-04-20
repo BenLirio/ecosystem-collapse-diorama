@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ecosystem Collapse Diorama</title>
   <meta property="og:title" content="Ecosystem Collapse Diorama">
-  <meta property="og:description" content="A tiny procedural ecosystem lives in your browser — watch herbivores graze, predators hunt, plants grow, and weather shift. Every 5 minutes a nature report is filed.">
+  <meta property="og:description" content="A tiny procedural ecosystem lives in your browser — watch herbivores graze, predators hunt, plants grow, and weather shift. Introduce your own custom organisms and watch chaos unfold.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://benlirio.com/ecosystem-collapse-diorama/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,8 +50,32 @@
         <input type="range" id="speed-slider" min="0.5" max="3" step="0.5" value="1">
         <span id="speed-val">1×</span>
       </label>
+      <button id="btn-add-organism" title="Introduce a new organism">+ Organism</button>
       <button id="btn-snapshot" title="Save nature report as image">📷 Snapshot</button>
     </footer>
+
+    <!-- Add Organism Modal -->
+    <div id="add-organism-overlay">
+      <div id="add-organism-modal" role="dialog" aria-labelledby="org-modal-title">
+        <div id="org-stamp">NEW SPECIES</div>
+        <h2 id="org-modal-title">Introduce an Organism</h2>
+        <p class="org-hint">Describe it in plain language. The ecosystem will interpret your rules.</p>
+
+        <label class="org-label" for="org-name-input">Name</label>
+        <input id="org-name-input" type="text" maxlength="24" placeholder="e.g. Gloom Stalker" autocomplete="off">
+
+        <label class="org-label" for="org-desc-input">Description &amp; Rules</label>
+        <textarea id="org-desc-input" maxlength="400" placeholder="e.g. A giant slow blue predator that hunts herbivores. Rare, solitary, efficient metabolism."></textarea>
+
+        <div id="org-gen-result"></div>
+
+        <div id="org-actions">
+          <button id="org-cancel">Cancel</button>
+          <button id="org-preview">Preview Rules</button>
+          <button id="org-release" class="primary">Release into Ecosystem</button>
+        </div>
+      </div>
+    </div>
 
     <div id="share" style="display:none">
       <button onclick="share()">Share your result!</button>
