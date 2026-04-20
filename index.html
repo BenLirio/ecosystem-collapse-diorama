@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ecosystem Collapse Diorama</title>
+  <meta property="og:title" content="Ecosystem Collapse Diorama">
+  <meta property="og:description" content="A tiny procedural ecosystem lives in your browser — watch herbivores graze, predators hunt, plants grow, and weather shift. Every 5 minutes a nature report is filed.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+  <script src="feedback.js" defer></script>
+</head>
+<body>
+  <div id="app">
+    <header id="hud">
+      <div id="hud-left">
+        <span id="clock">00:00</span>
+        <span id="weather-label">☀ Clear</span>
+      </div>
+      <div id="hud-center">
+        <span id="app-title">ECOSYSTEM COLLAPSE DIORAMA</span>
+      </div>
+      <div id="hud-right">
+        <span id="pop-counts"></span>
+      </div>
+    </header>
+
+    <div id="canvas-wrap">
+      <canvas id="world"></canvas>
+      <div id="report-overlay" style="display:none">
+        <div id="report-card">
+          <div id="report-stamp">FIELD REPORT</div>
+          <div id="report-time"></div>
+          <div id="report-title"></div>
+          <div id="report-body"></div>
+          <button id="report-dismiss">continue observing →</button>
+        </div>
+      </div>
+    </div>
+
+    <footer id="controls">
+      <button id="btn-reset" title="Reset ecosystem">↺ Reset</button>
+      <label id="speed-wrap">
+        Speed
+        <input type="range" id="speed-slider" min="0.5" max="3" step="0.5" value="1">
+        <span id="speed-val">1×</span>
+      </label>
+      <button id="btn-snapshot" title="Save nature report as image">📷 Snapshot</button>
+    </footer>
+
+    <div id="share" style="display:none">
+      <button onclick="share()">Share your result!</button>
+    </div>
+  </div>
+</body>
+</html>
