@@ -405,6 +405,74 @@ html, body {
   background: var(--stamp-green);
 }
 
+/* ── PRESET BUTTONS ──────────────────────────── */
+#preset-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+  padding-top: 4px;
+  border-top: 1px solid rgba(43,29,14,0.2);
+  margin-top: 2px;
+}
+
+#preset-label {
+  font-family: 'VT323', monospace;
+  font-size: 15px;
+  color: var(--ink-faded);
+  letter-spacing: 1px;
+}
+
+.preset-btn {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  border: 2px solid var(--ink-faded) !important;
+  font-family: 'VT323', monospace !important;
+  font-size: 15px !important;
+  padding: 4px 10px !important;
+  min-height: 32px !important;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  letter-spacing: 0.5px;
+}
+
+.preset-btn:hover {
+  background: var(--ink-faded) !important;
+  color: var(--paper) !important;
+}
+
+.preset-btn.active {
+  background: var(--accent) !important;
+  color: var(--paper) !important;
+  border-color: var(--stamp-green) !important;
+}
+
+/* ── ORGANISM QUICK-PRESET HINTS ─────────────── */
+#org-preset-hints {
+  margin-bottom: 2px;
+}
+
+.org-hint-btn {
+  display: inline-block;
+  margin: 3px 4px 3px 0;
+  padding: 5px 10px;
+  background: rgba(43,29,14,0.06);
+  border: 1px solid var(--ink-faded);
+  color: var(--ink-faded);
+  font-family: 'Special Elite', serif;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.12s, color 0.12s;
+}
+
+.org-hint-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
 /* ── SHARE (hidden, used for web share API) ──── */
 #share {
   display: none;
